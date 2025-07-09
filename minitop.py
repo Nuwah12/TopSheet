@@ -3,9 +3,7 @@ import socket
 import time
 import yaml
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 
-# Google Sheets setup
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 client = gspread.oauth()
 sheet = client.create("Bioinfo Job Tracker").sheet1
