@@ -8,6 +8,8 @@ scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/au
 client = gspread.oauth()
 sheet = client.create("Bioinfo Job Tracker").sheet1
 
+job_terms = ["minimap2", "bwa", "juicer", "awk", "gzip", "macs2", "STAR", "samtools", "bcftools", "java"] # list of keywords 
+
 # Clean existing data
 sheet.clear()
 sheet.append_row(['Hostname', 'PID', 'Command', '%CPU', '%MEM', 'Elapsed Time', 'Last Updated'])
@@ -23,7 +25,7 @@ def monitor():
         for proc in psutil.process_iter(['pid', 'name', 'cpu_percent', 'memory_percent', 'create_time', 'cmdline']):
             try:
                 cmd = ' '.join(proc.info['cmdline']) if proc.info['cmdline'] else proc.info['name']
-                if 'minimap2' in cmd or 'flye' in cmd or 'hic' in cmd:  # customize this
+                if any(term in cmd for term in job_terms):
                     elapsed = int(time.time() - proc.info['create_time'])
                     rows.append([
                         hostname,
