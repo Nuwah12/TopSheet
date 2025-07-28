@@ -4,20 +4,32 @@ import time
 import yaml
 import gspread
 
+#### TODO:
+# TopSheetParams.yml for parameters
+
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 client = gspread.oauth()
+# make the sheet name customizable
 sheet = client.create("Bioinfo Job Tracker").sheet1
 
+# TODO: Make this a user parameter
 job_terms = ["minimap2", "bwa", "juicer", "awk", "gzip", "macs2", "STAR", "samtools", "bcftools", "java"] # list of keywords 
 
 # Clean existing data
 sheet.clear()
+## move this as it will be determined by user params
 sheet.append_row(['Hostname', 'PID', 'Command', '%CPU', '%MEM', 'Elapsed Time', 'Last Updated'])
 
 hostname = socket.gethostname()
 
 def monitor():
+"""
+Function to stream process information.
 
+TODO:
+    - Add usability parameters (refresh interval, process info fields, portion of command string to parse)
+    - Add endpoint parameter (i.e. what machine to monitor)
+"""
     while True:
         now = time.strftime('%Y-%m-%d %H:%M:%S')
         rows = []
